@@ -1,0 +1,352 @@
+[
+  {
+    "id": 46,
+    "name": "Абхазия",
+    "popular": 1,
+    "popularity": 48928,
+    "directfly": 0,
+    "regular": 2,
+    "directcharter": 0,
+    "directregular": 0
+  },
+  {
+    "id": 55,
+    "name": "Азербайджан",
+    "popular": 0,
+    "popularity": 2114,
+    "directfly": 1,
+    "regular": 1,
+    "directcharter": 1,
+    "directregular": 1
+  },
+  {
+    "id": 57,
+    "name": "Беларусь",
+    "popular": 0,
+    "popularity": 926,
+    "directfly": 0,
+    "regular": 2,
+    "directcharter": 0,
+    "directregular": 0
+  },
+  {
+    "id": 37,
+    "name": "Венгрия",
+    "popular": 0,
+    "popularity": 182,
+    "directfly": 0,
+    "regular": 2,
+    "directcharter": 0,
+    "directregular": 0
+  },
+  {
+    "id": 16,
+    "name": "Вьетнам",
+    "popular": 1,
+    "popularity": 187692,
+    "directfly": 1,
+    "regular": 1,
+    "directcharter": 1,
+    "directregular": 1
+  },
+  {
+    "id": 38,
+    "name": "Германия",
+    "popular": 0,
+    "popularity": 39,
+    "directfly": 0,
+    "regular": 2,
+    "directcharter": 0,
+    "directregular": 0
+  },
+  {
+    "id": 6,
+    "name": "Греция",
+    "popular": 0,
+    "popularity": 1262,
+    "directfly": 0,
+    "regular": 2,
+    "directcharter": 0,
+    "directregular": 0
+  },
+  {
+    "id": 54,
+    "name": "Грузия",
+    "popular": 0,
+    "popularity": 14047,
+    "directfly": 1,
+    "regular": 1,
+    "directcharter": 1,
+    "directregular": 1
+  },
+  {
+    "id": 1,
+    "name": "Египет",
+    "popular": 1,
+    "popularity": 205976,
+    "directfly": 1,
+    "regular": 1,
+    "directcharter": 1,
+    "directregular": 0
+  },
+  {
+    "id": 3,
+    "name": "Индия",
+    "popular": 0,
+    "popularity": 3608,
+    "directfly": 1,
+    "regular": 1,
+    "directcharter": 0,
+    "directregular": 0
+  },
+  {
+    "id": 7,
+    "name": "Индонезия",
+    "popular": 0,
+    "popularity": 6575,
+    "directfly": 1,
+    "regular": 1,
+    "directcharter": 1,
+    "directregular": 1
+  },
+  {
+    "id": 14,
+    "name": "Испания",
+    "popular": 0,
+    "popularity": 824,
+    "directfly": 0,
+    "regular": 2,
+    "directcharter": 0,
+    "directregular": 0
+  },
+  {
+    "id": 24,
+    "name": "Италия",
+    "popular": 0,
+    "popularity": 817,
+    "directfly": 0,
+    "regular": 2,
+    "directcharter": 0,
+    "directregular": 0
+  },
+  {
+    "id": 78,
+    "name": "Казахстан",
+    "popular": 0,
+    "popularity": 3536,
+    "directfly": 0,
+    "regular": 2,
+    "directcharter": 0,
+    "directregular": 0
+  },
+  {
+    "id": 79,
+    "name": "Катар",
+    "popular": 0,
+    "popularity": 2524,
+    "directfly": 1,
+    "regular": 1,
+    "directcharter": 1,
+    "directregular": 1
+  },
+  {
+    "id": 51,
+    "name": "Кения",
+    "popular": 0,
+    "popularity": 124,
+    "directfly": 0,
+    "regular": 2,
+    "directcharter": 0,
+    "directregular": 0
+  },
+  {
+    "id": 15,
+    "name": "Кипр",
+    "popular": 0,
+    "popularity": 2307,
+    "directfly": 0,
+    "regular": 2,
+    "directcharter": 0,
+    "directregular": 0
+  },
+  {
+    "id": 13,
+    "name": "Китай",
+    "popular": 1,
+    "popularity": 63775,
+    "directfly": 1,
+    "regular": 1,
+    "directcharter": 1,
+    "directregular": 1
+  },
+  {
+    "id": 27,
+    "name": "Маврикий",
+    "popular": 0,
+    "popularity": 2293,
+    "directfly": 1,
+    "regular": 1,
+    "directcharter": 1,
+    "directregular": 0
+  },
+  {
+    "id": 36,
+    "name": "Малайзия",
+    "popular": 0,
+    "popularity": 1332,
+    "directfly": 1,
+    "regular": 1,
+    "directcharter": 1,
+    "directregular": 1
+  },
+  {
+    "id": 8,
+    "name": "Мальдивы",
+    "popular": 0,
+    "popularity": 24051,
+    "directfly": 1,
+    "regular": 1,
+    "directcharter": 1,
+    "directregular": 1
+  },
+  {
+    "id": 23,
+    "name": "Марокко",
+    "popular": 0,
+    "popularity": 874,
+    "directfly": 0,
+    "regular": 2,
+    "directcharter": 0,
+    "directregular": 0
+  },
+  {
+    "id": 9,
+    "name": "ОАЭ",
+    "popular": 1,
+    "popularity": 54730,
+    "directfly": 1,
+    "regular": 1,
+    "directcharter": 1,
+    "directregular": 1
+  },
+  {
+    "id": 64,
+    "name": "Оман",
+    "popular": 0,
+    "popularity": 393,
+    "directfly": 0,
+    "regular": 2,
+    "directcharter": 0,
+    "directregular": 1
+  },
+  {
+    "id": 47,
+    "name": "Россия",
+    "popular": 1,
+    "popularity": 70768,
+    "directfly": 1,
+    "regular": 1,
+    "directcharter": 0,
+    "directregular": 0
+  },
+  {
+    "id": 28,
+    "name": "Сейшелы",
+    "popular": 0,
+    "popularity": 4703,
+    "directfly": 0,
+    "regular": 2,
+    "directcharter": 0,
+    "directregular": 0
+  },
+  {
+    "id": 2,
+    "name": "Таиланд",
+    "popular": 1,
+    "popularity": 114261,
+    "directfly": 1,
+    "regular": 1,
+    "directcharter": 1,
+    "directregular": 1
+  },
+  {
+    "id": 41,
+    "name": "Танзания",
+    "popular": 0,
+    "popularity": 4365,
+    "directfly": 0,
+    "regular": 2,
+    "directcharter": 0,
+    "directregular": 0
+  },
+  {
+    "id": 4,
+    "name": "Турция",
+    "popular": 1,
+    "popularity": 554189,
+    "directfly": 1,
+    "regular": 1,
+    "directcharter": 1,
+    "directregular": 1
+  },
+  {
+    "id": 32,
+    "name": "Франция",
+    "popular": 0,
+    "popularity": 162,
+    "directfly": 0,
+    "regular": 2,
+    "directcharter": 0,
+    "directregular": 0
+  },
+  {
+    "id": 21,
+    "name": "Черногория",
+    "popular": 0,
+    "popularity": 4290,
+    "directfly": 0,
+    "regular": 2,
+    "directcharter": 0,
+    "directregular": 0
+  },
+  {
+    "id": 19,
+    "name": "Чехия",
+    "popular": 0,
+    "popularity": 258,
+    "directfly": 0,
+    "regular": 2,
+    "directcharter": 0,
+    "directregular": 0
+  },
+  {
+    "id": 12,
+    "name": "Шри-Ланка",
+    "popular": 0,
+    "popularity": 4596,
+    "directfly": 1,
+    "regular": 1,
+    "directcharter": 1,
+    "directregular": 0
+  },
+  {
+    "id": 70,
+    "name": "Южная Корея",
+    "popular": 0,
+    "popularity": 302,
+    "directfly": 0,
+    "regular": 2,
+    "directcharter": 0,
+    "directregular": 0
+  },
+  {
+    "id": 49,
+    "name": "Япония",
+    "popular": 0,
+    "popularity": 282,
+    "directfly": 0,
+    "regular": 2,
+    "directcharter": 0,
+    "directregular": 0
+  }
+]

@@ -1,0 +1,1333 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Поиск туров из Узбекистана | Live B2B Gateway</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Plus Jakarta Sans', 'Inter', sans-serif; }
+    .loader-spin {
+      border: 3px solid rgba(255,255,255,0.3);
+      border-radius: 50%;
+      border-top: 3px solid #ffffff;
+      width: 20px;
+      height: 20px;
+      animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+    .hotel-img-placeholder {
+      background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+    }
+  </style>
+</head>
+<body class="bg-slate-100 text-slate-800 min-h-screen pb-16">
+
+  <!-- Шапка сайта -->
+  <header class="bg-slate-950 text-white px-6 py-4 shadow-xl border-b border-indigo-500/20 sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-4">
+      <div class="flex items-center gap-3">
+        <div class="bg-gradient-to-r from-amber-400 to-amber-500 text-slate-950 font-black text-sm px-3.5 py-1.5 rounded-xl shadow-lg flex items-center gap-2">
+          <span class="w-2.5 h-2.5 rounded-full bg-slate-950 animate-ping"></span>
+          TOURVISOR BRIDGE PRO
+        </div>
+        <div>
+          <h1 class="text-lg font-bold flex items-center gap-2">
+            Онлайн Поиск Туров для Турагентства
+            <span class="bg-emerald-500/20 text-emerald-400 text-xs px-2.5 py-0.5 rounded-full border border-emerald-500/30">0$ Абонплаты</span>
+          </h1>
+          <p class="text-xs text-slate-400">Прямой опрос всех операторов: Kompas, Fun&Sun, Pegas, Centrum Holidays, Easy Booking, Kazunion, Aqua Travel</p>
+        </div>
+      </div>
+      <div class="flex items-center gap-3">
+        <div class="flex items-center bg-slate-900 px-3 py-1.5 rounded-xl border border-slate-800">
+          <span class="text-xs text-slate-400 mr-2">Вылет:</span>
+          <select id="headerDepartureSelect" onchange="syncDeparture(this.value)" class="bg-transparent text-amber-400 font-bold text-xs focus:outline-none cursor-pointer">
+            <option value="106" selected class="bg-slate-900 text-white">✈️ Ташкент (TAS)</option>
+            <option value="125" class="bg-slate-900 text-white">✈️ Самарканд (SKD)</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 pt-6">
+
+    <!-- Форма поиска туров (Полный аналог формы Турвизора) -->
+    <div class="bg-white p-6 sm:p-7 rounded-3xl shadow-md border border-slate-200/80 mb-8 transition-all">
+      <div class="flex items-center justify-between mb-5 pb-3 border-b border-slate-100">
+        <div class="flex items-center gap-2">
+          <span class="text-xl">✈️</span>
+          <h2 class="font-extrabold text-slate-800 text-base">Параметры поиска тура</h2>
+          <span class="text-xs bg-indigo-50 text-indigo-700 font-bold px-2 py-0.5 rounded-lg border border-indigo-100">Живой опрос операторов</span>
+        </div>
+        <div id="liveStatusBadge" class="text-xs text-slate-500 flex items-center gap-1.5">
+          <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+          <span>Готов к поиску</span>
+        </div>
+      </div>
+
+      <form id="searchForm" onsubmit="event.preventDefault(); startFullSearch();">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-4">
+
+          <!-- Город вылета -->
+          <div class="lg:col-span-2">
+            <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1.5">Город вылета</label>
+            <select id="departureSelect" onchange="syncDeparture(this.value)" class="w-full bg-slate-50 hover:bg-slate-100/80 border border-slate-300 text-slate-900 font-bold text-sm rounded-xl px-3 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 transition cursor-pointer">
+              <option value="106" selected>Ташкент (TAS)</option>
+              <option value="125">Самарканд (SKD)</option>
+            </select>
+          </div>
+
+          <!-- Страна назначения -->
+          <div class="lg:col-span-3">
+            <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1.5">Куда летим</label>
+            <div class="relative">
+              <select id="countrySelect" onchange="onCountryChanged()" class="w-full bg-slate-50 hover:bg-slate-100/80 border border-slate-300 text-slate-900 font-bold text-sm rounded-xl px-4 py-3 appearance-none focus:outline-none focus:ring-2 focus:ring-indigo-500 transition cursor-pointer">
+                <optgroup label="🕋 Паломничество и авторские программы (Эксклюзив)">
+                  <option value="999">🕋 Умра 2026 (Мекка & Медина)</option>
+                </optgroup>
+                <optgroup label="🔥 Чартерные пакетные туры (в 1 клик)">
+                  <option value="2" selected>🇹🇭 Таиланд</option>
+                  <option value="4">🇹🇷 Турция</option>
+                  <option value="1">🇪🇬 Египет</option>
+                  <option value="9">🇦🇪 ОАЭ</option>
+                  <option value="16">🇻🇳 Вьетнам</option>
+                  <option value="8">🇲🇻 Мальдивы</option>
+                  <option value="12">🇱🇰 Шри-Ланка</option>
+                  <option value="3">🇮🇳 Индия (Гоа)</option>
+                  <option value="7">🇮🇩 Индонезия (Бали)</option>
+                  <option value="35">🇲🇾 Малайзия</option>
+                  <option value="13">🇨🇳 Китай (о. Хайнань)</option>
+                  <option value="79">🇶🇦 Катар</option>
+                  <option value="54">🇬🇪 Грузия</option>
+                </optgroup>
+                <optgroup label="🏛 Европа и индивидуальные туры (под запрос)">
+                  <option value="32">🇫🇷 Франция (Париж, Лазурный берег)</option>
+                  <option value="24">🇮🇹 Италия (Рим, Милан)</option>
+                  <option value="14">🇪🇸 Испания (Барселона)</option>
+                  <option value="6">🇬🇷 Греция</option>
+                  <option value="31">🇦🇹 Австрия</option>
+                  <option value="19">🇨🇿 Чехия</option>
+                </optgroup>
+              </select>
+              <div class="absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400">
+                ▼
+              </div>
+            </div>
+          </div>
+
+          <!-- Даты вылета (Интервал) -->
+          <div class="lg:col-span-3">
+            <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1.5">Интервал дат вылета</label>
+            <div class="grid grid-cols-2 gap-2">
+              <input type="date" id="dateFrom" class="w-full bg-slate-50 border border-slate-300 text-slate-800 text-xs font-semibold rounded-xl px-2.5 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+              <input type="date" id="dateTo" class="w-full bg-slate-50 border border-slate-300 text-slate-800 text-xs font-semibold rounded-xl px-2.5 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            </div>
+          </div>
+
+          <!-- Ночей (От - До) -->
+          <div class="lg:col-span-2">
+            <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1.5">Ночей</label>
+            <div class="flex items-center gap-1.5">
+              <input type="number" id="nightsFrom" min="1" max="30" value="6" class="w-full bg-slate-50 border border-slate-300 text-slate-800 font-bold text-center text-sm rounded-xl py-2.5 focus:outline-none focus:ring-2 focus:ring-indigo-500" title="Ночей от">
+              <span class="text-slate-400 font-bold text-xs">—</span>
+              <input type="number" id="nightsTo" min="1" max="30" value="14" class="w-full bg-slate-50 border border-slate-300 text-slate-800 font-bold text-center text-sm rounded-xl py-2.5 focus:outline-none focus:ring-2 focus:ring-indigo-500" title="Ночей до">
+            </div>
+          </div>
+
+          <!-- Туристы: Взрослые + Дети -->
+          <div class="lg:col-span-2">
+            <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1.5">Туристы</label>
+            <div class="grid grid-cols-2 gap-2">
+              <select id="adultsSelect" class="w-full bg-slate-50 border border-slate-300 text-slate-800 font-bold text-xs rounded-xl px-2 py-2.5 focus:outline-none focus:ring-2 focus:ring-indigo-500" title="Взрослых">
+                <option value="1">1 взр</option>
+                <option value="2" selected>2 взр</option>
+                <option value="3">3 взр</option>
+                <option value="4">4 взр</option>
+              </select>
+              <select id="childrenSelect" onchange="onChildrenChanged()" class="w-full bg-slate-50 border border-slate-300 text-slate-800 font-bold text-xs rounded-xl px-2 py-2.5 focus:outline-none focus:ring-2 focus:ring-indigo-500" title="Детей">
+                <option value="0" selected>0 дет</option>
+                <option value="1">1 реб</option>
+                <option value="2">2 дет</option>
+                <option value="3">3 дет</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- Вторая строка параметров: Звезды, Питание, Поиск по названию отеля, Кнопка -->
+          
+          <!-- Звёзды -->
+          <div class="lg:col-span-2">
+            <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1.5">Класс отеля</label>
+            <select id="starsSelect" class="w-full bg-slate-50 border border-slate-300 text-slate-800 font-bold text-sm rounded-xl px-3 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 cursor-pointer">
+              <option value="0" selected>Все звёзды</option>
+              <option value="3">3★ и выше</option>
+              <option value="4">4★ и выше</option>
+              <option value="5">Только 5★ (Люкс)</option>
+            </select>
+          </div>
+
+          <!-- Питание -->
+          <div class="lg:col-span-3">
+            <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1.5">Тип питания</label>
+            <select id="mealSelect" class="w-full bg-slate-50 border border-slate-300 text-slate-800 font-bold text-sm rounded-xl px-3 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500 cursor-pointer">
+              <option value="0" selected>Любое питание</option>
+              <option value="7">Всё включено (AI / UAI)</option>
+              <option value="4">Завтрак + ужин (HB)</option>
+              <option value="3">Только завтраки (BB)</option>
+              <option value="5">Полный пансион (FB)</option>
+              <option value="1">Без питания (RO)</option>
+            </select>
+          </div>
+
+          <!-- Поиск по названию отеля (Autocomplete) -->
+          <div class="lg:col-span-4 relative">
+            <label class="block text-xs font-bold uppercase tracking-wider text-slate-500 mb-1.5">Поиск конкретного отеля</label>
+            <div class="relative">
+              <input type="text" id="hotelSearchInput" oninput="onHotelSearchInput(this.value)" placeholder="Название (например, Rixos, Hilton...)" class="w-full bg-slate-50 border border-slate-300 text-slate-800 text-sm font-semibold rounded-xl px-3.5 py-3 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+              <button type="button" id="clearHotelBtn" onclick="clearSelectedHotel()" class="hidden absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 text-xs bg-slate-200 rounded-full w-5 h-5 flex items-center justify-center">✕</button>
+            </div>
+            <!-- Выпадающий список подсказок -->
+            <div id="autocompleteDropdown" class="hidden absolute left-0 right-0 top-full mt-1 bg-white border border-slate-200 rounded-2xl shadow-xl z-50 max-h-60 overflow-y-auto"></div>
+            <input type="hidden" id="selectedHotelId" value="">
+          </div>
+
+          <!-- Кнопка поиска -->
+          <div class="lg:col-span-3">
+            <label class="block text-xs font-bold text-transparent mb-1.5 hidden lg:block">Кнопка</label>
+            <button type="submit" id="searchSubmitBtn" class="w-full bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white font-bold py-3 px-4 rounded-xl shadow-lg shadow-indigo-600/30 transition flex items-center justify-center gap-2 cursor-pointer">
+              <span id="btnText">Найти туры</span>
+              <div id="btnSpinner" class="hidden loader-spin"></div>
+            </button>
+          </div>
+
+        </div>
+
+        <!-- Динамическая плашка выбора возраста детей -->
+        <div id="childrenAgesContainer" class="hidden mt-4 pt-3 border-t border-slate-100 flex flex-wrap items-center gap-4">
+          <span class="text-xs font-bold text-slate-600">Укажите возраст детей:</span>
+          <div id="childrenAgesInputs" class="flex flex-wrap gap-3"></div>
+        </div>
+
+      </form>
+    </div>
+
+    <!-- Индикатор загрузки / опроса операторов -->
+    <div id="searchingState" class="hidden bg-white p-8 rounded-3xl shadow-sm border border-slate-200 text-center mb-8">
+      <div class="inline-block p-4 rounded-full bg-indigo-50 mb-3 animate-pulse">
+        <svg class="w-8 h-8 text-indigo-600 animate-spin" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
+      </div>
+      <h3 class="text-base font-bold text-slate-800 mb-1">Опрашиваем туроператоров в реальном времени...</h3>
+      <p class="text-xs text-slate-500 mb-4">Прямое подключение: Kompas, Fun&Sun, Pegas, Centrum Holidays, Easy Booking, Kazunion, Aqua Travel</p>
+      <div class="w-full max-w-md mx-auto bg-slate-100 rounded-full h-2 overflow-hidden">
+        <div id="progressBar" class="bg-indigo-600 h-2 rounded-full transition-all duration-500" style="width: 25%"></div>
+      </div>
+    </div>
+
+    <!-- Панель фильтров и статистики -->
+    <div id="resultsHeader" class="hidden flex flex-wrap items-center justify-between gap-4 mb-6 bg-white p-4 sm:px-6 rounded-2xl border border-slate-200/80 shadow-sm">
+      <div class="flex items-center gap-3">
+        <span class="bg-indigo-600 text-white font-extrabold text-sm px-3 py-1 rounded-xl shadow-sm" id="hotelsCountBadge">
+          0 отелей
+        </span>
+        <div>
+          <span class="text-sm font-bold text-slate-800" id="resultsTitle">Найдено туров</span>
+          <div class="text-xs text-slate-500" id="minPriceInfo">Минимальная цена: от $...</div>
+        </div>
+      </div>
+
+      <!-- Сортировка -->
+      <div class="flex items-center gap-2">
+        <span class="text-xs text-slate-500 font-semibold">Сортировка:</span>
+        <select id="sortBy" onchange="renderHotels()" class="bg-slate-50 border border-slate-300 text-slate-800 text-xs font-bold rounded-lg px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-indigo-500 cursor-pointer">
+          <option value="price_asc">Сначала недорогие ($)</option>
+          <option value="price_desc">Сначала дорогие ($)</option>
+          <option value="stars_desc">По звёздам (5★ → 1★)</option>
+          <option value="rating_desc">По рейтингу отеля</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Фильтры: Курорты, Звезды, Питание -->
+    <div id="filtersBar" class="hidden mb-6 flex flex-wrap gap-2 items-center">
+      <span class="text-xs font-bold text-slate-400 uppercase tracking-wider mr-1">Курорт:</span>
+      <div id="resortsContainer" class="flex flex-wrap gap-1.5">
+        <!-- Кнопки курортов -->
+      </div>
+      <div class="h-4 w-px bg-slate-300 mx-2 hidden sm:block"></div>
+      <span class="text-xs font-bold text-slate-400 uppercase tracking-wider mr-1">Звёзды:</span>
+      <div class="flex gap-1">
+        <button onclick="filterByStars(0)" class="star-btn px-2.5 py-1 rounded-lg text-xs font-bold border transition bg-indigo-600 text-white border-indigo-600" data-star="0">Все</button>
+        <button onclick="filterByStars(3)" class="star-btn px-2.5 py-1 rounded-lg text-xs font-bold border transition bg-white text-slate-700 border-slate-300 hover:bg-slate-50" data-star="3">3★</button>
+        <button onclick="filterByStars(4)" class="star-btn px-2.5 py-1 rounded-lg text-xs font-bold border transition bg-white text-slate-700 border-slate-300 hover:bg-slate-50" data-star="4">4★</button>
+        <button onclick="filterByStars(5)" class="star-btn px-2.5 py-1 rounded-lg text-xs font-bold border transition bg-white text-slate-700 border-slate-300 hover:bg-slate-50" data-star="5">5★</button>
+      </div>
+    </div>
+
+    <!-- Сетка карточек отелей -->
+    <div id="hotelsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <!-- Карточки отелей -->
+    </div>
+
+    <!-- Кнопка пагинации "Показать еще" -->
+    <div id="loadMoreContainer" class="hidden text-center mt-10">
+      <button onclick="showMoreHotels()" class="bg-white hover:bg-slate-50 active:bg-slate-100 text-slate-800 font-bold py-3 px-8 rounded-2xl border border-slate-300 shadow-sm transition hover:shadow cursor-pointer flex items-center justify-center gap-2 mx-auto">
+        <span>Показать ещё 18 отелей</span>
+        <span class="text-xs text-slate-400" id="loadMoreCounter"></span>
+      </button>
+    </div>
+
+    <!-- Пустое состояние -->
+    <div id="emptyState" class="hidden bg-white p-12 rounded-3xl shadow-sm border border-slate-200 text-center my-8">
+      <div class="text-4xl mb-3">🔍</div>
+      <h3 class="text-lg font-bold text-slate-800 mb-1">Туры по выбранным фильтрам не найдены</h3>
+      <p class="text-xs text-slate-500 mb-4">Попробуйте расширить даты вылета или сбросить фильтр звёзд</p>
+      <button onclick="resetFilters()" class="bg-indigo-50 text-indigo-700 font-bold px-4 py-2 rounded-xl text-xs hover:bg-indigo-100 transition">
+        Сбросить фильтры
+      </button>
+    </div>
+
+    <!-- Карточка индивидуального тура для европейских направлений (Франция, Италия, Испания и др.) -->
+    <div id="individualTourCard" class="hidden bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 text-white p-8 md:p-12 rounded-3xl shadow-2xl border border-indigo-500/30 text-center my-8 max-w-3xl mx-auto">
+      <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-indigo-500/20 text-indigo-300 text-3xl mb-4 border border-indigo-400/30 shadow-inner">
+        🏛
+      </div>
+      <h3 class="text-2xl font-black mb-3 text-white">Индивидуальный расчет тура: <span id="individualCountryTitle" class="text-indigo-300">Франция</span></h3>
+      <p class="text-slate-300 text-sm max-w-xl mx-auto mb-6 leading-relaxed">
+        По европейским направлениям туроператоры не ставят чартеры из Ташкента. Поездка организуется <b>индивидуально под ключ</b>: прямой рейс <b>Uzbekistan Airways</b> (Ташкент — Париж) или удобная стыковка через Стамбул, бронирование отелей 3★–5★ и <b>помощь со слотами и подачей на шенгенскую визу</b>!
+      </p>
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 text-left max-w-xl mx-auto mb-8">
+        <div class="bg-white/5 border border-white/10 rounded-2xl p-4">
+          <div class="text-indigo-400 font-bold text-xs mb-1">✈️ Перелет</div>
+          <div class="text-xs text-slate-300">Прямой рейс Ташкент — Париж (Uzbekistan Airways) или Turkish Airlines</div>
+        </div>
+        <div class="bg-white/5 border border-white/10 rounded-2xl p-4">
+          <div class="text-emerald-400 font-bold text-xs mb-1">🏨 Отели & Города</div>
+          <div class="text-xs text-slate-300">Париж, Диснейленд, Ницца, Канны, Монако — любые проверенные отели</div>
+        </div>
+        <div class="bg-white/5 border border-white/10 rounded-2xl p-4">
+          <div class="text-amber-400 font-bold text-xs mb-1">📑 Виза & Сервис</div>
+          <div class="text-xs text-slate-300">Запись в TLScontact, подготовка документов, трансферы и страховка</div>
+        </div>
+      </div>
+      <button onclick="openCustomTourModal()" class="bg-gradient-to-r from-indigo-500 via-indigo-600 to-violet-600 hover:from-indigo-600 hover:to-violet-700 text-white font-extrabold px-8 py-4 rounded-2xl text-sm shadow-xl shadow-indigo-500/30 transition transform hover:-translate-y-0.5 active:translate-y-0 cursor-pointer">
+        Запросить индивидуальный расчет тура ✨
+      </button>
+    </div>
+
+  </main>
+
+  <!-- Модальное окно деталей отеля и отправки заявки -->
+  <div id="hotelModal" class="hidden fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-white rounded-3xl max-w-xl w-full overflow-hidden shadow-2xl border border-slate-200 max-h-[90vh] flex flex-col">
+      
+      <!-- Шапка модалки с фото высокого качества -->
+      <div class="relative h-64 bg-slate-900 flex-shrink-0">
+        <img id="modalImg" src="" alt="Hotel" class="w-full h-full object-cover">
+        <button onclick="closeModal()" class="absolute top-3 right-3 bg-slate-950/70 hover:bg-slate-950 text-white rounded-full p-2 text-sm transition">✕</button>
+        <div class="absolute bottom-3 left-3 bg-slate-950/80 backdrop-blur-md text-white text-xs px-3.5 py-1.5 rounded-xl flex items-center gap-2">
+          <span id="modalStars" class="text-amber-400 font-bold"></span>
+          <span id="modalRating" class="bg-emerald-500 text-white font-bold px-1.5 py-0.5 rounded text-[10px]"></span>
+        </div>
+      </div>
+
+      <!-- Контент модалки -->
+      <div class="p-6 overflow-y-auto flex-1">
+        <h3 id="modalName" class="text-xl font-extrabold text-slate-900 mb-1"></h3>
+        <p id="modalRegion" class="text-xs text-slate-500 mb-4"></p>
+        
+        <!-- Детали пакета тура -->
+        <div class="bg-slate-50 rounded-2xl p-4 mb-5 border border-slate-100 text-xs space-y-2">
+          <div class="flex justify-between">
+            <span class="text-slate-500">Город вылета:</span>
+            <span class="font-bold text-slate-800" id="modalDeparture"></span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-slate-500">Дата вылета:</span>
+            <span id="modalDate" class="font-bold text-slate-800"></span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-slate-500">Длительность:</span>
+            <span id="modalNights" class="font-bold text-slate-800"></span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-slate-500">Питание в отеле:</span>
+            <span id="modalMeal" class="font-bold text-indigo-700"></span>
+          </div>
+          <div class="flex justify-between">
+            <span class="text-slate-500">Туроператор (B2B):</span>
+            <span id="modalOperator" class="font-bold text-indigo-600"></span>
+          </div>
+        </div>
+
+        <!-- Цена -->
+        <div class="flex items-center justify-between pb-5 mb-5 border-b border-slate-100">
+          <div>
+            <div class="text-[11px] text-slate-400">Итоговая цена тура:</div>
+            <div class="text-2xl font-black text-indigo-600" id="modalPrice"></div>
+            <div class="text-xs text-slate-500 font-bold" id="modalUzs"></div>
+          </div>
+          <a id="modalTelegramBtn" href="#" target="_blank" class="bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold py-2.5 px-4 rounded-xl border border-slate-200 transition flex items-center gap-1.5">
+            <span>✈️ Открыть в Telegram</span>
+          </a>
+        </div>
+
+        <!-- Интерактивная форма захвата лида (+998) -->
+        <div id="leadFormContainer" class="bg-indigo-50/60 p-4 rounded-2xl border border-indigo-100">
+          <h4 class="font-extrabold text-sm text-slate-900 mb-1">Забронировать тур или получить консультацию</h4>
+          <p class="text-xs text-slate-500 mb-3">Оставьте контакт — менеджер зафиксирует эту цену и свяжется с вами в течение 10 минут.</p>
+          
+          <form id="leadForm" onsubmit="event.preventDefault(); submitLead();" class="space-y-2.5">
+            <input type="text" id="leadName" required placeholder="Ваше имя" class="w-full bg-white border border-slate-300 text-slate-800 text-xs rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            <input type="tel" id="leadPhone" required placeholder="+998 (90) 123-45-67" class="w-full bg-white border border-slate-300 text-slate-800 text-xs font-bold rounded-xl px-3 py-2.5 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+            <button type="submit" id="leadSubmitBtn" class="w-full bg-emerald-600 hover:bg-emerald-700 active:bg-emerald-800 text-white font-bold text-xs py-3 px-4 rounded-xl shadow-md transition flex items-center justify-center gap-2 cursor-pointer">
+              <span id="leadBtnText">Отправить заявку менеджеру</span>
+              <div id="leadBtnSpinner" class="hidden loader-spin"></div>
+            </button>
+          </form>
+        </div>
+
+        <!-- Уведомление об успехе заявки -->
+        <div id="leadSuccessBadge" class="hidden bg-emerald-50 border border-emerald-200 p-4 rounded-2xl text-center">
+          <div class="text-2xl mb-1">✅</div>
+          <div class="font-extrabold text-sm text-emerald-800 mb-0.5">Заявка успешно принята!</div>
+          <p class="text-xs text-emerald-600">Менеджер турагентства уже проверяет бронь отеля и свяжется с вами.</p>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Глобальное состояние
+    let allHotels = [];
+    let displayedCount = 18;
+    let selectedResort = 'all';
+    let selectedStar = 0;
+    let currentModalHotel = null;
+    let autocompleteTimeout = null;
+
+    // Синхронизация городов вылета
+    function syncDeparture(val) {
+      document.getElementById('departureSelect').value = val;
+      document.getElementById('headerDepartureSelect').value = val;
+    }
+
+    // Инициализация дат по умолчанию (завтра + 10 дней)
+    function initDefaultDates() {
+      const today = new Date();
+      const fromDate = new Date(today);
+      fromDate.setDate(today.getDate() + 1);
+      const toDate = new Date(today);
+      toDate.setDate(today.getDate() + 10);
+
+      document.getElementById('dateFrom').value = formatDateISO(fromDate);
+      document.getElementById('dateTo').value = formatDateISO(toDate);
+    }
+
+    function formatDateISO(d) {
+      return d.toISOString().split('T')[0];
+    }
+
+    function formatDateRU(isoStr) {
+      const parts = isoStr.split('-');
+      if (parts.length === 3) return `${parts[2]}.${parts[1]}.${parts[0]}`;
+      return isoStr;
+    }
+
+    // Обработка изменения детей -> показ селекторов возраста
+    function onChildrenChanged() {
+      const count = parseInt(document.getElementById('childrenSelect').value);
+      const container = document.getElementById('childrenAgesContainer');
+      const inputsDiv = document.getElementById('childrenAgesInputs');
+
+      if (count === 0) {
+        container.classList.add('hidden');
+        inputsDiv.innerHTML = '';
+        return;
+      }
+
+      container.classList.remove('hidden');
+      inputsDiv.innerHTML = '';
+
+      for (let i = 1; i <= count; i++) {
+        const wrap = document.createElement('div');
+        wrap.className = 'flex items-center gap-1.5';
+        wrap.innerHTML = `
+          <label class="text-[11px] font-semibold text-slate-500">Реб. ${i}:</label>
+          <select class="child-age-select bg-slate-50 border border-slate-300 text-slate-800 text-xs font-bold rounded-lg px-2 py-1.5 focus:outline-none">
+            ${Array.from({length: 18}, (_, age) => `<option value="${age}" ${age === 7 ? 'selected' : ''}>${age} лет</option>`).join('')}
+          </select>
+        `;
+        inputsDiv.appendChild(wrap);
+      }
+    }
+
+    // Автокомплит отелей
+    function onHotelSearchInput(val) {
+      clearTimeout(autocompleteTimeout);
+      const dropdown = document.getElementById('autocompleteDropdown');
+      const clearBtn = document.getElementById('clearHotelBtn');
+      const country = document.getElementById('countrySelect').value;
+
+      if (!val || val.trim().length < 2) {
+        dropdown.classList.add('hidden');
+        clearBtn.classList.add('hidden');
+        return;
+      }
+
+      clearBtn.classList.remove('hidden');
+
+      autocompleteTimeout = setTimeout(async () => {
+        try {
+          const res = await fetch(`/api/autocomplete_hotels?country=${country}&q=${encodeURIComponent(val)}`);
+          const data = await res.json();
+          const hotels = data.hotels || [];
+
+          if (hotels.length === 0) {
+            dropdown.innerHTML = '<div class="p-3 text-xs text-slate-400">Отели не найдены</div>';
+            dropdown.classList.remove('hidden');
+            return;
+          }
+
+          dropdown.innerHTML = hotels.map(h => `
+            <div onclick="selectHotel(${h.id}, '${h.name.replace(/'/g, "\\'")}')" class="p-2.5 px-3 hover:bg-indigo-50 cursor-pointer border-b border-slate-100 last:border-0 flex items-center justify-between text-xs">
+              <div>
+                <span class="font-bold text-slate-900">${h.name}</span>
+                <span class="text-slate-400 text-[11px] ml-1">(${h.region})</span>
+              </div>
+              <span class="text-amber-500 font-bold">${'★'.repeat(h.stars)}</span>
+            </div>
+          `).join('');
+          dropdown.classList.remove('hidden');
+        } catch (e) {
+          console.warn('Autocomplete error:', e);
+        }
+      }, 250);
+    }
+
+    function selectHotel(id, name) {
+      document.getElementById('selectedHotelId').value = id;
+      document.getElementById('hotelSearchInput').value = name;
+      document.getElementById('autocompleteDropdown').classList.add('hidden');
+      document.getElementById('clearHotelBtn').classList.remove('hidden');
+    }
+
+    function clearSelectedHotel() {
+      document.getElementById('selectedHotelId').value = '';
+      document.getElementById('hotelSearchInput').value = '';
+      document.getElementById('autocompleteDropdown').classList.add('hidden');
+      document.getElementById('clearHotelBtn').classList.add('hidden');
+    }
+
+    function onCountryChanged() {
+      clearSelectedHotel();
+    }
+
+    // Загрузка списка стран с разделением на чартеры и индивидуальную Европу
+    async function loadCountries() {
+      try {
+        const res = await fetch('/api/countries');
+        const data = await res.json();
+        const sel = document.getElementById('countrySelect');
+        if (data.charter && data.individual) {
+          sel.innerHTML = '';
+          
+          if (data.umrah && data.umrah.length > 0) {
+            const grpUmrah = document.createElement('optgroup');
+            grpUmrah.label = '🕋 Паломничество и авторские программы (Эксклюзив)';
+            data.umrah.forEach(c => {
+              const opt = document.createElement('option');
+              opt.value = c.id;
+              opt.textContent = c.name;
+              grpUmrah.appendChild(opt);
+            });
+            sel.appendChild(grpUmrah);
+          }
+
+          const grpCharter = document.createElement('optgroup');
+          grpCharter.label = '🔥 Чартерные пакетные туры (в 1 клик)';
+          data.charter.forEach(c => {
+            const opt = document.createElement('option');
+            opt.value = c.id;
+            opt.textContent = c.name;
+            if (c.id === 2) opt.selected = true; // Таиланд по умолчанию
+            grpCharter.appendChild(opt);
+          });
+          sel.appendChild(grpCharter);
+
+          const grpIndiv = document.createElement('optgroup');
+          grpIndiv.label = '🏛 Европа и индивидуальные туры (под запрос)';
+          data.individual.forEach(c => {
+            const opt = document.createElement('option');
+            opt.value = c.id;
+            opt.textContent = c.name;
+            grpIndiv.appendChild(opt);
+          });
+          sel.appendChild(grpIndiv);
+        } else if (data.countries && data.countries.length > 0) {
+          sel.innerHTML = '';
+          data.countries.forEach(c => {
+            const opt = document.createElement('option');
+            opt.value = c.id;
+            opt.textContent = c.name;
+            if (c.id === 2) opt.selected = true;
+            sel.appendChild(opt);
+          });
+        }
+      } catch (e) {
+        console.warn('Countries load error:', e);
+      }
+    }
+
+    // Запуск полного поиска
+    async function startFullSearch(overrideStars = null) {
+      const departure = document.getElementById('departureSelect').value;
+      const country = document.getElementById('countrySelect').value;
+      const dateFromVal = document.getElementById('dateFrom').value;
+      const dateToVal = document.getElementById('dateTo').value;
+      const nightsFrom = document.getElementById('nightsFrom').value;
+      const nightsTo = document.getElementById('nightsTo').value;
+      const adults = document.getElementById('adultsSelect').value;
+      const childrenCount = parseInt(document.getElementById('childrenSelect').value);
+      const meal = document.getElementById('mealSelect').value;
+      const specificHotel = document.getElementById('selectedHotelId').value;
+
+      const starsSelect = document.getElementById('starsSelect');
+      if (overrideStars !== null && starsSelect) {
+        starsSelect.value = overrideStars;
+      }
+      const stars = overrideStars !== null ? overrideStars : (starsSelect ? starsSelect.value : 0);
+      selectedStar = parseInt(stars);
+
+      // Сбор возрастов детей
+      const childAgeSelects = document.querySelectorAll('.child-age-select');
+      const childAges = Array.from(childAgeSelects).map(s => s.value).join(',');
+
+      const datefrom = formatDateRU(dateFromVal);
+      const dateto = formatDateRU(dateToVal);
+
+      // UI индикация
+      const submitBtn = document.getElementById('searchSubmitBtn');
+      const btnText = document.getElementById('btnText');
+      const btnSpinner = document.getElementById('btnSpinner');
+      const searchingState = document.getElementById('searchingState');
+      const progressBar = document.getElementById('progressBar');
+      const resultsHeader = document.getElementById('resultsHeader');
+      const filtersBar = document.getElementById('filtersBar');
+      const emptyState = document.getElementById('emptyState');
+      const hotelsGrid = document.getElementById('hotelsGrid');
+
+      submitBtn.disabled = true;
+      btnText.textContent = 'Поиск...';
+      btnSpinner.classList.remove('hidden');
+      searchingState.classList.remove('hidden');
+      resultsHeader.classList.add('hidden');
+      filtersBar.classList.add('hidden');
+      emptyState.classList.add('hidden');
+      document.getElementById('loadMoreContainer').classList.add('hidden');
+      document.getElementById('individualTourCard').classList.add('hidden');
+      hotelsGrid.innerHTML = '';
+
+      progressBar.style.width = '30%';
+      const progressTimer = setInterval(() => {
+        let cur = parseInt(progressBar.style.width);
+        if (cur < 85) progressBar.style.width = (cur + 15) + '%';
+      }, 700);
+
+      let data = null;
+      try {
+        let url = `/api/full_search?departure=${departure}&country=${country}&datefrom=${encodeURIComponent(datefrom)}&dateto=${encodeURIComponent(dateto)}&nightsfrom=${nightsFrom}&nightsto=${nightsTo}&adults=${adults}&child=${childrenCount}&child_ages=${childAges}&stars=${stars}&meal=${meal}`;
+        if (specificHotel) {
+          url += `&hotels=${specificHotel}`;
+        }
+
+        const res = await fetch(url);
+        if (res.ok) {
+          data = await res.json();
+        }
+      } catch (err) {
+        console.warn('Live backend API not reachable, falling back to static catalog:', err);
+      }
+
+      if (!data) {
+        data = getStaticCatalogData(country, departure, stars, datefrom, nightsFrom);
+      }
+
+      clearInterval(progressTimer);
+      progressBar.style.width = '100%';
+
+      setTimeout(() => {
+        searchingState.classList.add('hidden');
+        submitBtn.disabled = false;
+        btnText.textContent = 'Найти туры';
+        btnSpinner.classList.add('hidden');
+
+        if (data.hotels && data.hotels.length > 0) {
+          allHotels = data.hotels;
+          displayedCount = 18;
+          
+          setupResortFilters(data.resorts || []);
+          updateStarButtons(selectedStar);
+          renderHotels();
+          
+          resultsHeader.classList.remove('hidden');
+          filtersBar.classList.remove('hidden');
+
+          const countryName = document.getElementById('countrySelect').options[document.getElementById('countrySelect').selectedIndex].text;
+          const starText = selectedStar > 0 ? ` (${selectedStar}★)` : '';
+          const depName = departure === '125' ? 'из Самарканда' : 'из Ташкента';
+          document.getElementById('resultsTitle').textContent = `Найдено ${allHotels.length} отелей${starText} в направлении ${countryName} с вылетом ${depName}`;
+          document.getElementById('minPriceInfo').textContent = `Минимальная цена: от $${allHotels[0].price_usd} (за тур)`;
+        } else {
+          if (data.is_individual) {
+            const countryName = document.getElementById('countrySelect').options[document.getElementById('countrySelect').selectedIndex].text;
+            document.getElementById('individualCountryTitle').textContent = countryName;
+            document.getElementById('individualTourCard').classList.remove('hidden');
+          } else {
+            emptyState.classList.remove('hidden');
+          }
+        }
+      }, 400);
+    }
+
+    // Открытие модалки для индивидуального расчета Европы (Франция, Италия и др.)
+    function openCustomTourModal() {
+      const countrySel = document.getElementById('countrySelect');
+      const countryName = countrySel.options[countrySel.selectedIndex].text;
+      const dates = `${document.getElementById('dateFrom').value} — ${document.getElementById('dateTo').value}`;
+      const nights = `${document.getElementById('nightsFrom').value} — ${document.getElementById('nightsTo').value} ночей`;
+      
+      const customTourObj = {
+        name: `Индивидуальный расчет тура: ${countryName}`,
+        stars: 5,
+        rating: 'VIP',
+        region: 'Париж / Лазурный берег / Регионы Франции',
+        date: dates,
+        nights: document.getElementById('nightsFrom').value,
+        meal: 'Завтраки или на выбор',
+        operator: 'Uzbekistan Airways / Turkish Airlines',
+        price_usd: 'Под запрос',
+        price_uzs: 0,
+        photo_large: 'https://images.unsplash.com/photo-1502602898657-3e91760cbb34?auto=format&fit=crop&w=800&q=80'
+      };
+
+      currentModalHotel = customTourObj;
+      document.getElementById('modalImg').src = customTourObj.photo_large;
+      document.getElementById('modalStars').textContent = 'Европа / VIP';
+      document.getElementById('modalRating').textContent = 'VIP';
+      document.getElementById('modalName').textContent = customTourObj.name;
+      document.getElementById('modalRegion').textContent = `Курорт / Локации: ${customTourObj.region}`;
+      document.getElementById('modalDate').textContent = dates;
+      document.getElementById('modalNights').textContent = nights;
+      document.getElementById('modalMeal').textContent = customTourObj.meal;
+      document.getElementById('modalOperator').textContent = customTourObj.operator;
+      document.getElementById('modalPrice').textContent = 'Индивидуально';
+      document.getElementById('modalUzs').textContent = 'Точный расчет под даты';
+
+      const depVal = document.getElementById('departureSelect').value;
+      document.getElementById('modalDeparture').textContent = depVal === '125' ? 'Самарканд (SKD)' : 'Ташкент (TAS)';
+
+      const tgText = encodeURIComponent(`Здравствуйте! Хочу индивидуальный расчет тура в ${countryName}. Вылет ${dates} (${nights}). Нужен перелет + отель + виза.`);
+      document.getElementById('modalTelegramBtn').href = `https://t.me/share/url?url=${tgText}`;
+
+      document.getElementById('leadFormContainer').classList.remove('hidden');
+      document.getElementById('leadSuccessBadge').classList.add('hidden');
+      document.getElementById('leadName').value = '';
+      document.getElementById('leadPhone').value = '';
+
+      document.getElementById('hotelModal').classList.remove('hidden');
+    }
+
+    function getStaticCatalogData(countryId, departure, stars, datefrom, nightsFrom) {
+      const cId = String(countryId);
+      const indEurope = ['32', '24', '14', '6', '31', '37', '15', '21', '19'];
+      if (indEurope.includes(cId)) {
+        return { hotels: [], resorts: [], is_individual: true };
+      }
+
+      const STATIC_DB = {
+        '999': [
+          {
+            hotel_id: 99901,
+            name: "🕋 VIP Пакет: Pullman ZamZam 5★ (1-я линия Харам)",
+            stars: 5,
+            rating: 4.9,
+            region: "Мекка (10н) + Медина (4н)",
+            price_usd: 1650,
+            price_uzs: 22600000,
+            date: datefrom || "05.10.2026",
+            dates_available: ["05.10.2026", "12.10.2026", "19.10.2026", "26.10.2026"],
+            nights: 14,
+            meal: "HB (Завтрак + Ужин)",
+            operator: "Turon Travel (Эксклюзив)",
+            photo: "https://images.unsplash.com/photo-1591604129939-f1efa4d9f7fa?auto=format&fit=crop&w=800&q=80",
+            photo_large: "https://images.unsplash.com/photo-1591604129939-f1efa4d9f7fa?auto=format&fit=crop&w=1200&q=80",
+            is_exclusive: true,
+            badge: "👑 VIP Первая линия Харам",
+            description: "50 метров до Каабы в комплексе Abraj Al Bait. Прямой перелет, виза Умра, VIP-трансферы, гид-элликбоши, экскурсии, подарок 5L Замзам + фирменный набор паломника."
+          },
+          {
+            hotel_id: 99902,
+            name: "🕋 Комфорт Плюс: Swissôtel Al Maqam 5★",
+            stars: 5,
+            rating: 4.8,
+            region: "Мекка (10н) + Медина (4н)",
+            price_usd: 1390,
+            price_uzs: 19000000,
+            date: datefrom || "05.10.2026",
+            dates_available: ["05.10.2026", "12.10.2026", "19.10.2026"],
+            nights: 14,
+            meal: "BB (Завтраки шведский стол)",
+            operator: "Turon Travel (Эксклюзив)",
+            photo: "https://images.unsplash.com/photo-1564769625905-50e93615e769?auto=format&fit=crop&w=800&q=80",
+            photo_large: "https://images.unsplash.com/photo-1564769625905-50e93615e769?auto=format&fit=crop&w=1200&q=80",
+            is_exclusive: true,
+            badge: "⭐ Комплекс Abraj Al Bait",
+            description: "Прямой доступ в мечеть Аль-Харам. Виза Умра, комфортабельные автобусы Mercedes, гид, посещение горы Ухуд, Куба, вода Замзам."
+          },
+          {
+            hotel_id: 99903,
+            name: "🕋 Стандарт: Voco Makkah 4★ (IHG)",
+            stars: 4,
+            rating: 4.6,
+            region: "Мекка (7н) + Медина (3н)",
+            price_usd: 1150,
+            price_uzs: 15750000,
+            date: datefrom || "12.10.2026",
+            dates_available: ["12.10.2026", "19.10.2026", "26.10.2026"],
+            nights: 10,
+            meal: "BB (Завтраки)",
+            operator: "Turon Travel (Эксклюзив)",
+            photo: "https://images.unsplash.com/photo-1542816417-0983c9c9ad53?auto=format&fit=crop&w=800&q=80",
+            photo_large: "https://images.unsplash.com/photo-1542816417-0983c9c9ad53?auto=format&fit=crop&w=1200&q=80",
+            is_exclusive: true,
+            badge: "🚌 Бесплатный шатл 24/7",
+            description: "Круглосуточный шатл каждые 3 минуты до мечети. Виза Умра, прямой рейс, медицинская страховка, сопровождение, вода Замзам."
+          },
+          {
+            hotel_id: 99904,
+            name: "🕋 Эконом Пакет: Al Kiswah Towers 3★",
+            stars: 3,
+            rating: 4.4,
+            region: "Мекка (10н) + Медина (4н)",
+            price_usd: 950,
+            price_uzs: 13000000,
+            date: datefrom || "05.10.2026",
+            dates_available: ["05.10.2026", "12.10.2026", "19.10.2026"],
+            nights: 14,
+            meal: "Без питания (RO)",
+            operator: "Turon Travel (Эксклюзив)",
+            photo: "https://images.unsplash.com/photo-1565552645632-d725f8bfc19a?auto=format&fit=crop&w=800&q=80",
+            photo_large: "https://images.unsplash.com/photo-1565552645632-d725f8bfc19a?auto=format&fit=crop&w=1200&q=80",
+            is_exclusive: true,
+            badge: "🔥 Выгодная цена / Хиджаз",
+            description: "Доступный качественный пакет для паломников. Бесплатный автобус до Харама, виза Умра, прямой авиаперелет, опытный гид, вода Замзам."
+          }
+        ],
+        '2': [
+          {
+            hotel_id: 201,
+            name: "Marina Phuket Resort 4★",
+            stars: 4,
+            rating: 4.8,
+            region: "Карон, Пхукет",
+            price_usd: 890,
+            price_uzs: 12190000,
+            date: datefrom || "10.10.2026",
+            nights: parseInt(nightsFrom) || 8,
+            meal: "BB (Завтрак)",
+            operator: "Kompas Tour",
+            photo: "https://images.unsplash.com/photo-1582719508461-905c673771fd?auto=format&fit=crop&w=800&q=80",
+            photo_large: "https://images.unsplash.com/photo-1582719508461-905c673771fd?auto=format&fit=crop&w=1200&q=80"
+          },
+          {
+            hotel_id: 202,
+            name: "Centara Grand Beach Resort Phuket 5★",
+            stars: 5,
+            rating: 4.9,
+            region: "Карон, Пхукет",
+            price_usd: 1240,
+            price_uzs: 16988000,
+            date: datefrom || "12.10.2026",
+            nights: parseInt(nightsFrom) || 9,
+            meal: "BB (Завтрак)",
+            operator: "Fun&Sun",
+            photo: "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=800&q=80",
+            photo_large: "https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=1200&q=80"
+          },
+          {
+            hotel_id: 203,
+            name: "Beyond Resort Karon 4★ (Adults Only)",
+            stars: 4,
+            rating: 4.7,
+            region: "Карон, Пхукет",
+            price_usd: 970,
+            price_uzs: 13289000,
+            date: datefrom || "14.10.2026",
+            nights: parseInt(nightsFrom) || 8,
+            meal: "BB (Завтрак)",
+            operator: "Pegas Touristik",
+            photo: "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=800&q=80",
+            photo_large: "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?auto=format&fit=crop&w=1200&q=80"
+          },
+          {
+            hotel_id: 204,
+            name: "Phuket Graceland Resort & Spa 4★",
+            stars: 4,
+            rating: 4.6,
+            region: "Патонг, Пхукет",
+            price_usd: 820,
+            price_uzs: 11234000,
+            date: datefrom || "08.10.2026",
+            nights: parseInt(nightsFrom) || 7,
+            meal: "BB (Завтрак)",
+            operator: "Centrum Holidays",
+            photo: "https://images.unsplash.com/photo-1571896349842-33c89424de2d?auto=format&fit=crop&w=800&q=80",
+            photo_large: "https://images.unsplash.com/photo-1571896349842-33c89424de2d?auto=format&fit=crop&w=1200&q=80"
+          }
+        ],
+        '4': [
+          {
+            hotel_id: 401,
+            name: "Rixos Premium Belek 5★",
+            stars: 5,
+            rating: 4.9,
+            region: "Белек, Анталья",
+            price_usd: 1180,
+            price_uzs: 16166000,
+            date: datefrom || "06.10.2026",
+            nights: parseInt(nightsFrom) || 7,
+            meal: "All Inclusive (Всё включено)",
+            operator: "Pegas Touristik",
+            photo: "https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?auto=format&fit=crop&w=800&q=80",
+            photo_large: "https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?auto=format&fit=crop&w=1200&q=80"
+          },
+          {
+            hotel_id: 402,
+            name: "Delphin Imperial Lara 5★",
+            stars: 5,
+            rating: 4.8,
+            region: "Лара, Анталья",
+            price_usd: 990,
+            price_uzs: 13563000,
+            date: datefrom || "08.10.2026",
+            nights: parseInt(nightsFrom) || 7,
+            meal: "Ультра всё включено (UAI)",
+            operator: "Fun&Sun",
+            photo: "https://images.unsplash.com/photo-1540541338287-41700207dee6?auto=format&fit=crop&w=800&q=80",
+            photo_large: "https://images.unsplash.com/photo-1540541338287-41700207dee6?auto=format&fit=crop&w=1200&q=80"
+          }
+        ],
+        '1': [
+          {
+            hotel_id: 101,
+            name: "Rixos Sharm El Sheikh 5★ (Adults Only)",
+            stars: 5,
+            rating: 4.9,
+            region: "Набк Бей, Шарм-эль-Шейх",
+            price_usd: 940,
+            price_uzs: 12878000,
+            date: datefrom || "11.10.2026",
+            nights: parseInt(nightsFrom) || 7,
+            meal: "Ультра всё включено (UAI)",
+            operator: "Easy Booking",
+            photo: "https://images.unsplash.com/photo-1544644181-1484b3fdfc62?auto=format&fit=crop&w=800&q=80",
+            photo_large: "https://images.unsplash.com/photo-1544644181-1484b3fdfc62?auto=format&fit=crop&w=1200&q=80"
+          }
+        ],
+        '9': [
+          {
+            hotel_id: 901,
+            name: "Atlantis The Palm 5★",
+            stars: 5,
+            rating: 4.9,
+            region: "Пальма Джумейра, Дубай",
+            price_usd: 1750,
+            price_uzs: 23975000,
+            date: datefrom || "15.10.2026",
+            nights: parseInt(nightsFrom) || 7,
+            meal: "HB (Завтрак + Ужин)",
+            operator: "Kompas Tour",
+            photo: "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=800&q=80",
+            photo_large: "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?auto=format&fit=crop&w=1200&q=80"
+          }
+        ],
+        '8': [
+          {
+            hotel_id: 801,
+            name: "Sun Siyam Olhuveli Maldives 4★",
+            stars: 4,
+            rating: 4.8,
+            region: "Южный Мале Атолл",
+            price_usd: 1580,
+            price_uzs: 21646000,
+            date: datefrom || "18.10.2026",
+            nights: parseInt(nightsFrom) || 7,
+            meal: "FB (Полный пансион)",
+            operator: "Aqua Travel",
+            photo: "https://images.unsplash.com/photo-1514282401047-d79a71a590e8?auto=format&fit=crop&w=800&q=80",
+            photo_large: "https://images.unsplash.com/photo-1514282401047-d79a71a590e8?auto=format&fit=crop&w=1200&q=80"
+          }
+        ]
+      };
+
+      let list = STATIC_DB[cId] || STATIC_DB['2'];
+      if (stars && stars > 0) {
+        const filtered = list.filter(h => h.stars >= stars);
+        if (filtered.length > 0) list = filtered;
+      }
+      return {
+        hotels: list,
+        resorts: [...new Set(list.map(h => h.region))],
+        is_individual: false
+      };
+    }
+
+    function updateStarButtons(star) {
+      document.querySelectorAll('.star-btn').forEach(b => {
+        if (parseInt(b.dataset.star) === star) {
+          b.className = 'star-btn px-2.5 py-1 rounded-lg text-xs font-bold border transition bg-indigo-600 text-white border-indigo-600';
+        } else {
+          b.className = 'star-btn px-2.5 py-1 rounded-lg text-xs font-bold border transition bg-white text-slate-700 border-slate-300 hover:bg-slate-50';
+        }
+      });
+    }
+
+    function setupResortFilters(resorts) {
+      const container = document.getElementById('resortsContainer');
+      container.innerHTML = '';
+
+      const allBtn = document.createElement('button');
+      allBtn.className = selectedResort === 'all' 
+        ? 'resort-btn px-2.5 py-1 rounded-lg text-xs font-bold border transition bg-indigo-600 text-white border-indigo-600'
+        : 'resort-btn px-2.5 py-1 rounded-lg text-xs font-bold border transition bg-white text-slate-700 border-slate-300 hover:bg-slate-50';
+      allBtn.textContent = 'Все курорты';
+      allBtn.onclick = () => filterByResort('all', allBtn);
+      container.appendChild(allBtn);
+
+      resorts.forEach(r => {
+        if (!r) return;
+        const btn = document.createElement('button');
+        btn.className = selectedResort === r
+          ? 'resort-btn px-2.5 py-1 rounded-lg text-xs font-bold border transition bg-indigo-600 text-white border-indigo-600'
+          : 'resort-btn px-2.5 py-1 rounded-lg text-xs font-bold border transition bg-white text-slate-700 border-slate-300 hover:bg-slate-50';
+        btn.textContent = r;
+        btn.onclick = () => filterByResort(r, btn);
+        container.appendChild(btn);
+      });
+    }
+
+    function filterByResort(resort, btnElem) {
+      selectedResort = resort;
+      document.querySelectorAll('.resort-btn').forEach(b => {
+        b.className = 'resort-btn px-2.5 py-1 rounded-lg text-xs font-bold border transition bg-white text-slate-700 border-slate-300 hover:bg-slate-50';
+      });
+      btnElem.className = 'resort-btn px-2.5 py-1 rounded-lg text-xs font-bold border transition bg-indigo-600 text-white border-indigo-600';
+      displayedCount = 18;
+      renderHotels();
+    }
+
+    function filterByStars(star) {
+      selectedStar = star;
+      updateStarButtons(star);
+
+      const matchingCount = allHotels.filter(h => {
+        if (selectedResort !== 'all' && h.region !== selectedResort) return false;
+        return star === 0 || h.stars === star;
+      }).length;
+
+      if (matchingCount === 0 && star > 0) {
+        startFullSearch(star);
+        return;
+      }
+
+      displayedCount = 18;
+      renderHotels();
+    }
+
+    function resetFilters() {
+      selectedResort = 'all';
+      selectedStar = 0;
+      clearSelectedHotel();
+      filterByStars(0);
+      const firstResort = document.querySelector('.resort-btn');
+      if (firstResort) filterByResort('all', firstResort);
+    }
+
+    function renderHotels() {
+      const grid = document.getElementById('hotelsGrid');
+      const emptyState = document.getElementById('emptyState');
+      const loadMoreContainer = document.getElementById('loadMoreContainer');
+      const hotelsBadge = document.getElementById('hotelsCountBadge');
+
+      let filtered = allHotels.filter(h => {
+        if (selectedResort !== 'all' && h.region !== selectedResort) return false;
+        if (selectedStar > 0 && h.stars !== selectedStar) return false;
+        return true;
+      });
+
+      const sortBy = document.getElementById('sortBy').value;
+      if (sortBy === 'price_asc') {
+        filtered.sort((a, b) => a.price_usd - b.price_usd);
+      } else if (sortBy === 'price_desc') {
+        filtered.sort((a, b) => b.price_usd - a.price_usd);
+      } else if (sortBy === 'stars_desc') {
+        filtered.sort((a, b) => b.stars - a.stars);
+      } else if (sortBy === 'rating_desc') {
+        filtered.sort((a, b) => b.rating - a.rating);
+      }
+
+      hotelsBadge.textContent = `${filtered.length} отелей`;
+
+      if (filtered.length === 0) {
+        grid.innerHTML = '';
+        emptyState.classList.remove('hidden');
+        loadMoreContainer.classList.add('hidden');
+        return;
+      }
+
+      emptyState.classList.add('hidden');
+
+      const toShow = filtered.slice(0, displayedCount);
+      grid.innerHTML = toShow.map(h => createHotelCard(h)).join('');
+
+      if (displayedCount < filtered.length) {
+        loadMoreContainer.classList.remove('hidden');
+        document.getElementById('loadMoreCounter').textContent = `(еще ${filtered.length - displayedCount})`;
+      } else {
+        loadMoreContainer.classList.add('hidden');
+      }
+    }
+
+    function showMoreHotels() {
+      displayedCount += 18;
+      renderHotels();
+    }
+
+    function formatNumber(num) {
+      return (num || 0).toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ");
+    }
+
+    function createHotelCard(h) {
+      const starsStr = h.stars > 0 ? '★'.repeat(h.stars) : '';
+      const uzsFormatted = formatNumber(h.price_uzs);
+      const tgText = encodeURIComponent(`Здравствуйте! Хочу забронировать тур в ${h.name} (${h.stars}*), ${h.region}. Вылет ${h.date} на ${h.nights} ночей, питание ${h.meal}. Цена: $${h.price_usd}`);
+
+      return `
+        <div class="bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-slate-200/90 flex flex-col group">
+          <!-- Картинка отеля -->
+          <div class="relative h-52 w-full overflow-hidden hotel-img-placeholder">
+            <img src="${h.photo}" alt="${h.name}" loading="lazy" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=800&q=80';" class="w-full h-full object-cover group-hover:scale-105 transition duration-500">
+            <div class="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-black/30"></div>
+            
+            <div class="absolute top-3 left-3 bg-slate-950/80 backdrop-blur-md text-white text-[11px] font-bold px-3 py-1 rounded-xl shadow">
+              📍 ${h.region}
+            </div>
+
+            <div class="absolute bottom-3 left-3 flex items-center gap-2">
+              ${starsStr ? `<span class="text-amber-400 font-extrabold text-sm drop-shadow">${starsStr}</span>` : ''}
+              <span class="bg-emerald-500 text-white font-extrabold text-xs px-2 py-0.5 rounded-lg shadow">
+                ★ ${h.rating}
+              </span>
+            </div>
+
+            ${h.is_exclusive ? `
+              <div class="absolute top-3 right-3 bg-gradient-to-r from-amber-500 via-amber-400 to-yellow-400 text-slate-950 text-[10px] font-black px-2.5 py-1 rounded-xl shadow-lg border border-yellow-200/50 flex items-center gap-1">
+                <span>${h.badge || '👑 ЭКСКЛЮЗИВ'}</span>
+              </div>
+            ` : `
+              <div class="absolute top-3 right-3 bg-indigo-600/90 backdrop-blur-md text-white text-[10px] font-bold px-2 py-0.5 rounded-lg shadow">
+                ${h.operator}
+              </div>
+            `}
+          </div>
+
+          <!-- Контент -->
+          <div class="p-5 flex-1 flex flex-col justify-between">
+            <div>
+              <h3 class="font-bold text-slate-900 text-base leading-snug line-clamp-1 mb-2 group-hover:text-indigo-600 transition" title="${h.name}">
+                ${h.name}
+              </h3>
+              ${h.description ? `<p class="text-[11px] text-amber-900 bg-amber-50/90 p-2.5 rounded-xl border border-amber-200/60 mb-3 leading-snug font-medium">✨ ${h.description}</p>` : ''}
+
+              <div class="space-y-1.5 text-xs text-slate-600 mb-4 bg-slate-50 p-3 rounded-2xl border border-slate-100">
+                <div class="flex items-center justify-between">
+                  <span class="text-slate-400">Вылет:</span>
+                  <span class="font-bold text-slate-800">${h.date} (${h.nights} ночей)</span>
+                </div>
+                <div class="flex items-center justify-between">
+                  <span class="text-slate-400">Питание:</span>
+                  <span class="font-bold text-indigo-700">${h.meal}</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Цена и кнопки -->
+            <div class="pt-3 border-t border-slate-100 flex items-center justify-between gap-3">
+              <div>
+                <div class="text-[10px] text-slate-400 font-medium">Цена за тур:</div>
+                <div class="text-xl font-black text-indigo-600">$${h.price_usd}</div>
+                <div class="text-[11px] font-bold text-slate-500">${uzsFormatted} сум</div>
+              </div>
+
+              <div class="flex items-center gap-1.5">
+                <button onclick="openModal(${JSON.stringify(h).replace(/"/g, '&quot;')})" class="bg-indigo-600 hover:bg-indigo-700 active:bg-indigo-800 text-white font-bold text-xs py-2.5 px-3.5 rounded-xl shadow-md shadow-indigo-600/20 transition flex items-center gap-1">
+                  <span>Бронь</span>
+                </button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      `;
+    }
+
+    function openModal(h) {
+      currentModalHotel = h;
+      document.getElementById('modalImg').src = h.photo_large || h.photo;
+      document.getElementById('modalStars').textContent = '★'.repeat(h.stars);
+      document.getElementById('modalRating').textContent = h.rating;
+      document.getElementById('modalName').textContent = h.name;
+      document.getElementById('modalRegion').textContent = `Курорт: ${h.region}`;
+      document.getElementById('modalDate').textContent = h.date;
+      document.getElementById('modalNights').textContent = `${h.nights} ночей`;
+      document.getElementById('modalMeal').textContent = h.meal;
+      document.getElementById('modalOperator').textContent = h.operator;
+      document.getElementById('modalPrice').textContent = `$${h.price_usd}`;
+      document.getElementById('modalUzs').textContent = `${formatNumber(h.price_uzs)} сум`;
+
+      const depVal = document.getElementById('departureSelect').value;
+      document.getElementById('modalDeparture').textContent = depVal === '125' ? 'Самарканд (SKD)' : 'Ташкент (TAS)';
+
+      const tgText = encodeURIComponent(`Здравствуйте! Хочу забронировать тур в ${h.name} (${h.stars}*), ${h.region}. Вылет ${h.date} на ${h.nights} ночей, питание ${h.meal}. Цена: $${h.price_usd}`);
+      document.getElementById('modalTelegramBtn').href = `https://t.me/share/url?url=${tgText}`;
+
+      // Сброс формы лида
+      document.getElementById('leadFormContainer').classList.remove('hidden');
+      document.getElementById('leadSuccessBadge').classList.add('hidden');
+      document.getElementById('leadName').value = '';
+      document.getElementById('leadPhone').value = '';
+
+      document.getElementById('hotelModal').classList.remove('hidden');
+    }
+
+    function closeModal() {
+      document.getElementById('hotelModal').classList.add('hidden');
+    }
+
+    // Отправка заявки на бронирование
+    async function submitLead() {
+      if (!currentModalHotel) return;
+      const name = document.getElementById('leadName').value.trim();
+      const phone = document.getElementById('leadPhone').value.trim();
+      if (!name || !phone) return;
+
+      const btn = document.getElementById('leadSubmitBtn');
+      const text = document.getElementById('leadBtnText');
+      const spin = document.getElementById('leadBtnSpinner');
+
+      btn.disabled = true;
+      text.textContent = 'Отправка...';
+      spin.classList.remove('hidden');
+
+      const leadPayload = {
+        client_name: name,
+        client_phone: phone,
+        hotel_name: currentModalHotel.name,
+        stars: currentModalHotel.stars,
+        region: currentModalHotel.region,
+        date: currentModalHotel.date,
+        nights: currentModalHotel.nights,
+        meal: currentModalHotel.meal,
+        price_usd: currentModalHotel.price_usd,
+        price_uzs: currentModalHotel.price_uzs,
+        operator: currentModalHotel.operator,
+        departure: document.getElementById('departureSelect').value === '125' ? 'Самарканд' : 'Ташкент'
+      };
+
+      let sentSuccess = false;
+      try {
+        const res = await fetch('/api/submit_lead', {
+          method: 'POST',
+          headers: {'Content-Type': 'application/json'},
+          body: JSON.stringify(leadPayload)
+        });
+        if (res.ok) {
+          const data = await res.json();
+          if (data.success) sentSuccess = true;
+        }
+      } catch (e) {
+        console.warn('Backend server not reachable, using direct Telegram bot dispatch:', e);
+      }
+
+      // Если бэкенд не ответил (например, при открытии с GitHub Pages), отправляем напрямую в Telegram Bot API
+      if (!sentSuccess) {
+        try {
+          const tgToken = "8872361930:AAEdil-ITnEFsR2NopF9Vc_SMCa6xLHd2qA";
+          const chatId = "110907260";
+          const tgMsg = `🕋 <b>НОВАЯ ЗАЯВКА НА БРОНИРОВАНИЕ ТУРА!</b>\n\n` +
+            `👤 <b>Клиент:</b> ${name}\n` +
+            `📞 <b>Телефон:</b> <code>${phone}</code>\n` +
+            `✈️ <b>Вылет:</b> ${leadPayload.departure}\n\n` +
+            `🏨 <b>Отель / Программа:</b> ${leadPayload.hotel_name}\n` +
+            `📍 <b>Регион:</b> ${leadPayload.region}\n` +
+            `📅 <b>Дата:</b> ${leadPayload.date} (${leadPayload.nights} ночей)\n` +
+            `🍽 <b>Питание:</b> ${leadPayload.meal}\n` +
+            `🏢 <b>Оператор:</b> ${leadPayload.operator}\n\n` +
+            `💰 <b>Стоимость:</b> <b>$${leadPayload.price_usd}</b> (${Number(leadPayload.price_uzs || 0).toLocaleString('ru-RU')} сум)\n\n` +
+            `⚡ <i>Источник: GitHub Pages (Прямая отправка)</i>`;
+
+          await fetch(`https://api.telegram.org/bot${tgToken}/sendMessage`, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({
+              chat_id: chatId,
+              text: tgMsg,
+              parse_mode: 'HTML'
+            })
+          });
+          sentSuccess = true;
+        } catch (tgErr) {
+          console.error('Direct Telegram API failed:', tgErr);
+        }
+      }
+
+      btn.disabled = false;
+      text.textContent = 'Отправить заявку менеджеру';
+      spin.classList.add('hidden');
+
+      // Сохраняем в локальное хранилище браузера
+      try {
+        const storedLeads = JSON.parse(localStorage.getItem('turon_leads') || '[]');
+        storedLeads.push({...leadPayload, created_at: new Date().toISOString()});
+        localStorage.setItem('turon_leads', JSON.stringify(storedLeads));
+      } catch(e) {}
+
+      document.getElementById('leadFormContainer').classList.add('hidden');
+      document.getElementById('leadSuccessBadge').classList.remove('hidden');
+    }
+
+    // Закрытие выпадающего списка поиска отеля при клике вне него
+    document.addEventListener('click', (e) => {
+      const dropdown = document.getElementById('autocompleteDropdown');
+      const input = document.getElementById('hotelSearchInput');
+      if (dropdown && !dropdown.contains(e.target) && e.target !== input) {
+        dropdown.classList.add('hidden');
+      }
+    });
+
+    window.addEventListener('DOMContentLoaded', () => {
+      initDefaultDates();
+      loadCountries();
+      startFullSearch();
+    });
+  </script>
+</body>
+</html>

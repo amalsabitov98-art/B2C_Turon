@@ -1,0 +1,395 @@
+[
+  {
+    "id": 62,
+    "name": "Бангкок",
+    "country": 2,
+    "parentid": 0,
+    "airport": [
+      7,
+      136
+    ]
+  },
+  {
+    "id": 90,
+    "name": "Као Лак",
+    "country": 2,
+    "parentid": 0,
+    "airport": [
+      8,
+      115
+    ]
+  },
+  {
+    "id": 61,
+    "name": "Ко Чанг",
+    "country": 2,
+    "parentid": 0,
+    "airport": [
+      7
+    ]
+  },
+  {
+    "id": 60,
+    "name": "Краби",
+    "country": 2,
+    "parentid": 0,
+    "airport": [
+      8,
+      115
+    ]
+  },
+  {
+    "id": 7,
+    "name": "Паттайя",
+    "country": 2,
+    "parentid": 0,
+    "airport": [
+      7,
+      136
+    ]
+  },
+  {
+    "id": 8,
+    "name": "Пхукет",
+    "country": 2,
+    "parentid": 0,
+    "airport": [
+      8,
+      115
+    ]
+  },
+  {
+    "id": 89,
+    "name": "Районг",
+    "country": 2,
+    "parentid": 0,
+    "airport": [
+      136,
+      7
+    ]
+  },
+  {
+    "id": 9,
+    "name": "Самуи",
+    "country": 2,
+    "parentid": 0,
+    "airport": [
+      8,
+      7,
+      126
+    ]
+  },
+  {
+    "id": 63,
+    "name": "Хуа Хин",
+    "country": 2,
+    "parentid": 0,
+    "airport": [
+      7
+    ]
+  },
+  {
+    "id": 519,
+    "name": "Чианг Май",
+    "country": 2,
+    "parentid": 0,
+    "airport": [
+      8
+    ]
+  },
+  {
+    "id": 2070,
+    "name": "Банг Тао",
+    "country": 2,
+    "parentid": 8,
+    "airport": [
+      8,
+      115
+    ]
+  },
+  {
+    "id": 2079,
+    "name": "Бопхут",
+    "country": 2,
+    "parentid": 9,
+    "airport": [
+      8,
+      7,
+      126
+    ]
+  },
+  {
+    "id": 2439,
+    "name": "Вонгамат",
+    "country": 2,
+    "parentid": 7,
+    "airport": [
+      7,
+      136
+    ]
+  },
+  {
+    "id": 2068,
+    "name": "Джомтьен",
+    "country": 2,
+    "parentid": 7,
+    "airport": [
+      7,
+      136
+    ]
+  },
+  {
+    "id": 2071,
+    "name": "Камала",
+    "country": 2,
+    "parentid": 8,
+    "airport": [
+      8,
+      115
+    ]
+  },
+  {
+    "id": 2072,
+    "name": "Карон",
+    "country": 2,
+    "parentid": 8,
+    "airport": [
+      8,
+      115
+    ]
+  },
+  {
+    "id": 2073,
+    "name": "Ката",
+    "country": 2,
+    "parentid": 8,
+    "airport": [
+      8,
+      115
+    ]
+  },
+  {
+    "id": 2078,
+    "name": "Ко Панган",
+    "country": 2,
+    "parentid": 9,
+    "airport": [
+      8,
+      7,
+      126
+    ]
+  },
+  {
+    "id": 2083,
+    "name": "Краби",
+    "country": 2,
+    "parentid": 60,
+    "airport": [
+      8,
+      115
+    ]
+  },
+  {
+    "id": 2080,
+    "name": "Ламаи",
+    "country": 2,
+    "parentid": 9,
+    "airport": [
+      8,
+      7,
+      126
+    ]
+  },
+  {
+    "id": 2084,
+    "name": "Ланта",
+    "country": 2,
+    "parentid": 60,
+    "airport": [
+      8,
+      115
+    ]
+  },
+  {
+    "id": 2081,
+    "name": "Маенам",
+    "country": 2,
+    "parentid": 9,
+    "airport": [
+      8,
+      7,
+      126
+    ]
+  },
+  {
+    "id": 2166,
+    "name": "Май Кхао",
+    "country": 2,
+    "parentid": 8,
+    "airport": [
+      8,
+      115
+    ]
+  },
+  {
+    "id": 2437,
+    "name": "На Джомтьен",
+    "country": 2,
+    "parentid": 7,
+    "airport": [
+      7,
+      136
+    ]
+  },
+  {
+    "id": 2168,
+    "name": "Най Тхон",
+    "country": 2,
+    "parentid": 8,
+    "airport": [
+      8,
+      115
+    ]
+  },
+  {
+    "id": 2167,
+    "name": "Най Харн",
+    "country": 2,
+    "parentid": 8,
+    "airport": [
+      8,
+      115
+    ]
+  },
+  {
+    "id": 2561,
+    "name": "Най Янг",
+    "country": 2,
+    "parentid": 8,
+    "airport": [
+      8,
+      115
+    ]
+  },
+  {
+    "id": 2438,
+    "name": "Наклуа",
+    "country": 2,
+    "parentid": 7,
+    "airport": [
+      7,
+      136
+    ]
+  },
+  {
+    "id": 2074,
+    "name": "Панва",
+    "country": 2,
+    "parentid": 8,
+    "airport": [
+      8,
+      115
+    ]
+  },
+  {
+    "id": 2075,
+    "name": "Патонг",
+    "country": 2,
+    "parentid": 8,
+    "airport": [
+      8,
+      115
+    ]
+  },
+  {
+    "id": 2440,
+    "name": "Пратамнак Хилл",
+    "country": 2,
+    "parentid": 7,
+    "airport": [
+      7,
+      136
+    ]
+  },
+  {
+    "id": 2085,
+    "name": "Пхи-Пхи",
+    "country": 2,
+    "parentid": 60,
+    "airport": [
+      8,
+      115
+    ]
+  },
+  {
+    "id": 2076,
+    "name": "Раваи",
+    "country": 2,
+    "parentid": 8,
+    "airport": [
+      8,
+      115
+    ]
+  },
+  {
+    "id": 2554,
+    "name": "Самет",
+    "country": 2,
+    "parentid": 89,
+    "airport": [
+      136,
+      7
+    ]
+  },
+  {
+    "id": 2435,
+    "name": "Северная Паттайя",
+    "country": 2,
+    "parentid": 7,
+    "airport": [
+      7,
+      136
+    ]
+  },
+  {
+    "id": 2077,
+    "name": "Сурин",
+    "country": 2,
+    "parentid": 8,
+    "airport": [
+      8,
+      115
+    ]
+  },
+  {
+    "id": 2069,
+    "name": "Центральная Паттайя ",
+    "country": 2,
+    "parentid": 7,
+    "airport": [
+      7,
+      136
+    ]
+  },
+  {
+    "id": 2082,
+    "name": "Чавенг",
+    "country": 2,
+    "parentid": 9,
+    "airport": [
+      8,
+      7,
+      126
+    ]
+  },
+  {
+    "id": 2436,
+    "name": "Южная Паттайя",
+    "country": 2,
+    "parentid": 7,
+    "airport": [
+      7,
+      136
+    ]
+  }
+]
